@@ -1,540 +1,1287 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CutCoach — מאמן תזונה אישי</title>
-<style>
-:root{--bg:#f5f7fb;--card:#fff;--text:#18202a;--muted:#697586;--primary:#2563eb;--green:#16a34a;--red:#dc2626;--line:#e5e7eb;--shadow:0 8px 28px #15203312}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
-button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{max-width:1180px;margin:auto;padding:18px}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.brand{font-size:25px;font-weight:800}.brand span{color:var(--primary)}
-nav{display:flex;gap:6px;flex-wrap:wrap}nav button{background:transparent;padding:10px 13px;border-radius:10px;color:var(--muted)}nav button.active,nav button:hover{background:#e8efff;color:var(--primary)}
-.page{display:none}.page.active{display:block}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.grid2{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);margin-bottom:16px}.stat small,.muted{color:var(--muted)}.stat b{display:block;font-size:27px;margin:6px 0}.progress{height:9px;background:#edf0f4;border-radius:20px;overflow:hidden}.progress i{display:block;height:100%;background:var(--primary);border-radius:20px;width:0}.green{background:var(--green)!important}.danger{background:var(--red)!important}
-h1{font-size:28px;margin:4px 0 16px}h2{font-size:20px;margin:0 0 14px}h3{font-size:16px;margin:0 0 8px}.row{display:flex;gap:10px;align-items:center;justify-content:space-between}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#eef2ff;color:#334155;font-size:12px}
-label{display:block;font-size:13px;font-weight:650;margin-bottom:5px}.field{margin-bottom:13px}input,select,textarea{width:100%;padding:11px 12px;border:1px solid #d7dce3;border-radius:10px;background:#fff;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--primary)}
-.btn{padding:11px 15px;border-radius:10px;font-weight:700}.primary{background:var(--primary);color:#fff}.secondary{background:#eef2f7;color:#273244}.dangerBtn{background:#fee2e2;color:#991b1b}.actions{display:flex;gap:8px;flex-wrap:wrap}
-.foodline,.meal{border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0}.foodline{display:flex;justify-content:space-between;gap:10px}.meal strong{font-size:16px}.macro{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:13px}.macro b{color:var(--text)}
-.chat{height:410px;overflow:auto;background:#f8fafc;border-radius:12px;padding:12px}.msg{max-width:85%;padding:11px 13px;border-radius:13px;margin:8px 0;white-space:pre-wrap}.user{background:#dbeafe;margin-right:auto}.ai{background:#fff;border:1px solid var(--line)}.chatbar{display:flex;gap:8px;margin-top:10px}.chatbar input{flex:1}
-table{width:100%;border-collapse:collapse}th,td{text-align:right;padding:10px;border-bottom:1px solid var(--line);font-size:14px}.empty{padding:25px;text-align:center;color:var(--muted)}
-.hero{background:linear-gradient(135deg,#172554,#2563eb);color:white;border-radius:18px;padding:22px;margin-bottom:16px}.hero .muted{color:#dbeafe}.big{font-size:40px;font-weight:800}.notice{padding:12px;border-radius:10px;background:#fff7ed;color:#9a3412;font-size:13px;margin-top:10px}
-@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}header{align-items:flex-start;gap:10px;flex-direction:column}}@media(max-width:520px){.app{padding:10px}.grid{grid-template-columns:1fr 1fr}.card{padding:14px}.big{font-size:32px}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>רשימת קניות משותפת</title>
+    <!-- פונט Google בעברית מותאם וברור -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-cream: #fbf7ef;
+            --card-cream: #fffcf5;
+            --paper-border: #e6decb;
+            --text-main: #3d3223;
+            --text-sub: #7a6e5d;
+            --accent-warm: #d97736;
+            --accent-warm-hover: #b85e22;
+            --bought-bg: #f0f4ea;
+            --bought-border: #c3d6b1;
+            --delete-red: #c94a4a;
+            --cat-header-bg: #f5edd8;
+            --history-bg: #f2ebda;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-cream);
+            color: var(--text-main);
+            padding: 15px 12px 40px 12px;
+            font-size: 22px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 620px;
+            margin: 0 auto;
+            background: var(--card-cream);
+            padding: 24px 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(60, 48, 30, 0.08);
+            border: 2px solid var(--paper-border);
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 18px;
+            margin-bottom: 22px;
+            border-bottom: 3px dashed var(--paper-border);
+        }
+
+        .header h1 {
+            font-size: 2.3rem;
+            font-weight: 800;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .header-icon {
+            font-size: 2.6rem;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #eef6ec;
+            color: #2d6a2e;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-top: 10px;
+            border: 1px solid #c8e6c9;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            background-color: #4caf50;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .top-toolbar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-toolbar {
+            flex: 1;
+            padding: 12px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 12px;
+            border: 2px solid var(--paper-border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: #ffffff;
+            color: var(--text-main);
+        }
+
+        .btn-toolbar:hover {
+            background-color: var(--cat-header-bg);
+        }
+
+        .btn-clear-all {
+            background-color: #fdf0f0;
+            color: var(--delete-red);
+            border-color: #f8d7d7;
+        }
+
+        .btn-clear-all:hover {
+            background-color: var(--delete-red);
+            color: #ffffff;
+            border-color: var(--delete-red);
+        }
+
+        .add-card {
+            background-color: #fff9ed;
+            border: 2px solid var(--paper-border);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .input-text {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.3rem;
+            border: 2.5px solid var(--paper-border);
+            border-radius: 12px;
+            background-color: #ffffff;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .input-text:focus {
+            border-color: var(--accent-warm);
+        }
+
+        .suggestions-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border: 2.5px solid var(--accent-warm);
+            border-radius: 12px;
+            max-height: 250px;
+            overflow-y: auto;
+            z-index: 100;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            display: none;
+            margin-top: 4px;
+        }
+
+        .suggestions-dropdown.active {
+            display: block;
+        }
+
+        .suggestion-item {
+            padding: 14px 18px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 1px solid var(--paper-border);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover, .suggestion-item:active {
+            background-color: #fdf2e9;
+            color: var(--accent-warm-hover);
+        }
+
+        .optional-photo-block {
+            margin-top: 12px;
+            background: #ffffff;
+            border: 2px dashed #d6cbbe;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .photo-btn-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--accent-warm);
+            padding: 6px;
+        }
+
+        .photo-icon-lg {
+            font-size: 1.8rem;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .photo-preview-name {
+            margin-top: 6px;
+            font-size: 1rem;
+            color: #2d6a2e;
+            font-weight: bold;
+        }
+
+        .btn-add {
+            width: 100%;
+            background-color: var(--accent-warm);
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(217, 119, 54, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .btn-add:disabled {
+            background-color: #cccccc;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .category-section {
+            margin-bottom: 24px;
+        }
+
+        .category-header {
+            background-color: var(--cat-header-bg);
+            border: 2px solid var(--paper-border);
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .category-icon {
+            font-size: 1.8rem;
+        }
+
+        .shopping-list {
+            list-style: none;
+        }
+
+        .item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffff;
+            border: 2px solid var(--paper-border);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            gap: 14px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.03);
+        }
+
+        .item-row.bought {
+            background: var(--bought-bg);
+            border-color: var(--bought-border);
+        }
+
+        .item-row.bought .item-text {
+            text-decoration: line-through;
+            color: #728265;
+        }
+
+        .item-main {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-thumb {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid var(--paper-border);
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+        .item-thumb:hover {
+            transform: scale(1.05);
+        }
+
+        .item-generic-icon {
+            width: 60px;
+            height: 60px;
+            background: #fff8eb;
+            border: 2px solid #f2e2c9;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            flex-shrink: 0;
+        }
+
+        .item-text-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .item-text {
+            font-size: clamp(1rem, 4vw, 1.45rem);
+            font-weight: 700;
+            color: var(--text-main);
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            line-height: 1.35;
+        }
+
+        .specific-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #b85e22;
+            background: #fdf2e9;
+            padding: 3px 8px;
+            border-radius: 6px;
+            width: fit-content;
+        }
+
+        .item-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .checkbox-custom {
+            width: 44px;
+            height: 44px;
+            accent-color: #4caf50;
+            cursor: pointer;
+        }
+
+        .btn-delete {
+            background: #fdf0f0;
+            color: var(--delete-red);
+            border: 2px solid #f8d7d7;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-delete:hover {
+            background: var(--delete-red);
+            color: white;
+            border-color: var(--delete-red);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 10px;
+            color: var(--text-sub);
+        }
+
+        .empty-state-icon {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+        }
+
+        .empty-state-text {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: var(--card-cream);
+            border: 3px solid var(--paper-border);
+            border-radius: 20px;
+            padding: 24px;
+            max-width: 520px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: var(--text-main);
+        }
+
+        .modal-text {
+            font-size: 1.3rem;
+            margin-bottom: 22px;
+            color: var(--text-sub);
+            line-height: 1.4;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .btn-modal {
+            flex: 1;
+            padding: 16px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-modal-yes {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .btn-modal-no {
+            background-color: var(--delete-red);
+            color: white;
+        }
+
+        .btn-modal-cancel {
+            background-color: #cccccc;
+            color: #333333;
+        }
+
+        .saved-list-card {
+            background: #ffffff;
+            border: 2px solid var(--paper-border);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 16px;
+            text-align: right;
+        }
+
+        .saved-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            border-bottom: 1.5px solid var(--paper-border);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .saved-list-items {
+            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .saved-list-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-copy-list {
+            flex: 2;
+            background-color: var(--accent-warm);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-delete-history {
+            flex: 1;
+            background-color: #fdf0f0;
+            color: var(--delete-red);
+            border: 1.5px solid #f8d7d7;
+            padding: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .image-viewer-card {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 20px;
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .full-size-img {
+            max-width: 100%;
+            max-height: 65vh;
+            object-fit: contain;
+            border-radius: 12px;
+            border: 2px solid var(--paper-border);
+        }
+
+        .btn-back-img {
+            background-color: var(--accent-warm);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+
+    </style>
 </head>
-
 <body>
-<div id="userModal" style="display:none;position:fixed;inset:0;background:#0008;z-index:1000;padding:20px;align-items:center;justify-content:center">
-<div class="card" style="width:min(440px,100%);margin:auto">
-<h2>👤 החלפת משתמש</h2>
-<div class="muted" style="margin-bottom:12px">בחר משתמש כדי להיכנס אליו. לאחר הבחירה האפליקציה תטען את כל הנתונים שלו — כולל הפרופיל, יומן האוכל, המשקל, התפריט ושיחות ה־AI.</div>
-<div id="userList"></div>
-<div class="field" style="margin-top:12px"><label>שם משתמש חדש</label><input id="newUserName" placeholder="למשל: דניאל"></div>
-<div class="actions"><button class="btn primary" onclick="createUser()">צור משתמש</button><button class="btn secondary" onclick="closeUserModal()">סגור</button></div>
-<div class="notice">ההפרדה היא לפי שם במכשיר. בלי סיסמה, כל מי שיש לו גישה לאפליקציה יכול לבחור משתמש אחר.</div>
 
-</div></div>
+<div class="container">
+    <div class="header">
+        <h1>
+            <span class="header-icon">📝</span>
+            רשימת קניות
+        </h1>
+        <div class="status-badge">
+            <span class="status-dot"></span>
+            מסונכרן בזמן אמת
+        </div>
+    </div>
 
+    <div class="top-toolbar">
+        <button class="btn-toolbar" id="btnOpenHistory">
+            <span>📚</span>
+            <span>רשימות קודמות</span>
+        </button>
+        <button class="btn-toolbar btn-clear-all" id="btnClearAll">
+            <span>🗑️</span>
+            <span>נקה הכל</span>
+        </button>
+    </div>
+
+    <div class="add-card">
+        <div class="form-group">
+            <label for="itemInput">מה צריך לקנות?</label>
+            <input type="text" id="itemInput" class="input-text" placeholder="לדוגמה: חלב, עגבניות, סנו מקסימה, ריצפז..." autocomplete="off" required>
+            <div id="suggestionsDropdown" class="suggestions-dropdown"></div>
+        </div>
+
+        <div class="optional-photo-block">
+            <label for="imageInput" class="photo-btn-label">
+                <span class="photo-icon-lg">📸</span>
+                <span>צריך דגם/מוצר ספציפי בתמונה? (אופציונלי)</span>
+            </label>
+            <input type="file" id="imageInput" accept="image/*">
+            <div id="photoPreviewName" class="photo-preview-name"></div>
+        </div>
+
+
+        <button class="btn-add" id="addBtn">
+            <span>➕</span>
+            <span>הוסף לרשימה</span>
+        </button>
+    </div>
+
+    <div id="categoriesContainer">
+        <div class="empty-state">
+            <div class="empty-state-icon">⏳</div>
+            <div class="empty-state-text">טוען את רשימת הקניות...</div>
+        </div>
+    </div>
 </div>
 
-<div class="app">
-<header><div class="brand">Cut<span>Coach</span> 🥗</div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="btn secondary" id="updateBtn" onclick="updateApp()">🔄 עדכון</button><button class="btn secondary" id="currentUserBtn" onclick="openUserModal()">👤 משתמש</button>
-<nav id="nav">
-<button class="active" data-page="home">היום</button><button data-page="log">יומן אוכל</button><button data-page="menu">התפריט שלי</button><button data-page="progress">מעקב שבועי</button><button data-page="coach">AI Coach</button><button data-page="profile">הפרופיל</button>
-</nav></div></header>
 
-<section id="home" class="page active">
-<div class="hero"><div class="muted">היעד היומי שלך</div><div class="big" id="heroCal">0 / 0 kcal</div><div id="heroRemain">הגדר פרופיל כדי להתחיל</div></div>
-<div class="grid">
-<div class="card stat"><small>קלוריות</small><b id="sCal">0</b><div class="progress"><i id="pCal"></i></div></div>
-<div class="card stat"><small>חלבון</small><b id="sPro">0g</b><div class="progress"><i id="pPro" class="green"></i></div></div>
-<div class="card stat"><small>פחמימות</small><b id="sCarb">0g</b><div class="progress"><i id="pCarb"></i></div></div>
-<div class="card stat"><small>שומן</small><b id="sFat">0g</b><div class="progress"><i id="pFat"></i></div></div>
+<div class="modal-overlay" id="clearModal">
+    <div class="modal-card">
+        <div class="modal-title">🧹 ניקוי רשימת הקניות</div>
+        <div class="modal-text">האם ברצונך לשמור את רשימת הקניות הנוכחית לרשימות הקודמות שלך לפני הניקוי?</div>
+        <div class="modal-actions">
+            <button class="btn-modal btn-modal-yes" id="btnModalSaveAndClear">כן, שמור ונקה</button>
+            <button class="btn-modal btn-modal-no" id="btnModalClearOnly">לא, נקה בלבד</button>
+            <button class="btn-modal btn-modal-cancel" id="btnModalCancel">ביטול</button>
+        </div>
+    </div>
 </div>
-<div class="grid2"><div class="card"><h2>מה אכלתי היום?</h2><div id="todayMeals"></div><button class="btn primary" onclick="showPage('log')">＋ הוסף אוכל</button></div>
-<div class="card"><h2>התקדמות</h2><div id="goalBox"></div></div></div>
-</section>
 
-<section id="log" class="page">
-<h1>יומן אוכל</h1>
-<div class="grid2"><div class="card"><h2>הוסף מזון</h2>
-<div class="field"><label>מה אכלת?</label><input id="foodText" placeholder="לדוגמה: חזה עוף"></div>
-<div class="grid">
-<div class="field"><label>כמות</label><input id="foodQty" type="number" step="0.1" value="1" placeholder="למשל 200"></div>
-<div class="field"><label>יחידה</label><select id="foodUnit"><option value="g">גרם</option><option value="ml">מ"ל</option><option value="unit">יחידה</option><option value="slice">פרוסה</option><option value="serving">מנה</option></select></div>
+<div class="modal-overlay" id="historyModal">
+    <div class="modal-card">
+        <div class="modal-title">📚 רשימות קודמות שנשמרו</div>
+        <div id="historyContent">
+            <div class="modal-text">אין כרגע רשימות שמורות בהיסטוריה.</div>
+        </div>
+        <div style="margin-top: 20px;">
+            <button class="btn-modal btn-modal-cancel" id="btnCloseHistory" style="width: 100%;">סגור</button>
+        </div>
+    </div>
 </div>
-<div class="field"><label>קלוריות ל-100g / ליחידה (אופציונלי)</label><input id="foodCal" type="number" placeholder="לפי התווית"></div>
-<div class="field"><label>חלבון ל-100g / ליחידה (אופציונלי)</label><input id="foodPro" type="number" placeholder="לפי התווית"></div>
-<div class="field"><label>פחמימות ל-100g / ליחידה (אופציונלי)</label><input id="foodCarb" type="number" placeholder="אופציונלי"></div>
-<div class="field"><label>שומן ל-100g / ליחידה (אופציונלי)</label><input id="foodFat" type="number" placeholder="אופציונלי"></div>
-<div class="field"><label>ארוחה</label><select id="mealType"><option>בוקר</option><option>צהריים</option><option>ערב</option><option>נשנוש</option></select></div>
 
-<div class="actions">
-<button class="btn primary" onclick="addFood()">הוסף</button>
-<button class="btn secondary" onclick="smartFood()">✨ נתח טקסט</button>
-<button class="btn secondary" onclick="document.getElementById('foodPhoto').click()">📸 צלם אוכל</button>
-<button class="btn secondary" onclick="document.getElementById('foodGallery').click()">🖼️ בחר תמונה</button>
-</div>
-<input id="foodPhoto" type="file" accept="image/*" capture="environment" style="display:none" onchange="analyzeFoodImage(this.files[0])">
-<input id="foodGallery" type="file" accept="image/*" style="display:none" onchange="analyzeFoodImage(this.files[0])">
-<div id="photoPreview"></div>
-<hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
-<h3>🔎 חיפוש במאגר מוצרים</h3>
-<div class="field"><input id="productSearch" placeholder="חפש מוצר, מותג או מזון — למשל תנובה קוטג׳ 5%"></div>
-<div class="actions"><button class="btn secondary" onclick="searchProducts()">חפש במאגר</button><button class="btn secondary" onclick="scanBarcode()">📷 ברקוד</button></div>
-<div id="productResults"></div>
-<div id="smartResult"></div>
-</div><div class="card"><h2>היום</h2><div id="logList"></div></div></div>
-<div class="card"><div class="row"><div><h2>⭐ הארוחות השמורות שלי</h2><div class="muted">שמור ארוחה שאתה אוכל לעיתים קרובות והוסף אותה בלחיצה.</div></div></div><div id="savedMealsList"></div></div>
-</section>
-
-<section id="menu" class="page">
-<h1>התפריט הדינאמי שלי</h1>
-<div class="card" style="padding:12px 16px"><span class="muted">💡 התפריט יכול להתבסס על מוצרים אמיתיים מהמאגר — כולל ערכים ל-100 גרם/מנה.</span></div>
-<div class="card"><div class="row"><div><h2>תוכנית יומית</h2><div class="muted">התפריט מתחשב ביעד הקלורי ובחלבון שלך.</div></div><button class="btn primary" onclick="generateMenu()">🔄 צור מחדש</button></div><div id="menuList"></div></div>
-<div class="card"><h2>התאמה מהירה</h2><div class="grid2"><div class="field"><label>מה בא לך לאכול?</label><input id="wantFood" placeholder="למשל: שניצל ואורז"></div><div class="field"><label>כמה קלוריות נשארו?</label><input id="remainingInput" type="number"></div></div><button class="btn primary" onclick="portionAdvice()">חשב כמות</button><div id="portionResult"></div></div>
-</section>
-
-<section id="coach" class="page">
-<h1>AI Coach</h1><div class="card"><div class="chat" id="chat"></div><div class="chatbar"><input id="chatInput" onkeydown="if(event.key==='Enter')sendChat()" placeholder="למשל: נשארו לי 700 קלוריות, מה לאכול?"><button class="btn primary" onclick="sendChat()">שלח</button></div></div>
-</section>
-
-<section id="progress" class="page">
-<h1>📉 המעקב השבועי שלי</h1>
-<div class="card"><h2>דיווח שבועי</h2><div class="muted" style="margin-bottom:12px">פעם בשבוע הזן את המשקל שלך. האפליקציה תשמור את ההיסטוריה ותראה את קצב הירידה.</div>
-<div class="grid"><div class="field"><label>משקל השבוע (ק"ג)</label><input id="weeklyWeight" type="number" step="0.1"></div><div class="field"><label>תאריך</label><input id="weeklyDate" type="date"></div></div>
-<button class="btn primary" onclick="addWeeklyWeight()">שמור דיווח שבועי</button><div id="weeklySummary" style="margin-top:15px"></div></div>
-<div class="card"><h2>היסטוריית משקל</h2><div id="weightHistory"></div></div>
-</section>
-
-<section id="profile" class="page">
-<h1>הפרופיל שלי</h1><div class="grid2"><div class="card"><h2>נתונים אישיים</h2>
-<div class="grid"><div class="field"><label>מין</label><select id="gender"><option value="male">גבר</option><option value="female">אישה</option></select></div>
-<div class="field"><label>גיל</label><input id="age" type="number"></div><div class="field"><label>גובה (ס"מ)</label><input id="height" type="number"></div><div class="field"><label>משקל (ק"ג)</label><input id="weight" type="number"></div></div>
-<div class="grid"><div class="field"><label>משקל יעד</label><input id="target" type="number"></div><div class="field"><label>פעילות</label><select id="activity"><option value="1.2">מעט/יושבני</option><option value="1.375">קלה</option><option value="1.55">בינונית</option><option value="1.725">גבוהה</option><option value="1.9">גבוהה מאוד</option></select></div></div>
-<div class="field"><label>קצב ירידה רצוי (ק"ג בשבוע)</label><select id="rate"><option value=".25">0.25</option><option value=".5" selected>0.5</option><option value=".75">0.75</option><option value="1">1.0</option></select></div>
-<button class="btn primary" onclick="saveProfile()">שמור וחישב יעד</button></div>
-<div class="card"><h2>☁️ שמירת נתונים בענן</h2>
-<div class="muted" style="margin-bottom:10px">הנתונים נשמרים בענן לפי שם המשתמש ומשותפים בין כל המכשירים.</div>
-<div id="cloudStatus" class="muted" style="margin-bottom:10px">בודק חיבור...</div>
-<div class="actions"><button class="btn primary" onclick="cloudLogin()">התחבר/סנכרן</button><button class="btn secondary" onclick="syncCloud()">שמור עכשיו</button><button class="btn dangerBtn" onclick="cloudLogout()">התנתק</button></div>
-<div class="notice">האפליקציה מתחברת אוטומטית. ב-Firebase יש להפעיל Authentication → Sign-in method → Anonymous ולוודא שחוקי Firestore מאפשרים גישה לאוסף cutcoach_profiles.</div>
-</div>
-<div class="card"><h2>🤖 חיבור ל-Gemini</h2>
-<div class="muted" style="margin-bottom:10px">לשימוש אישי אפשר להדביק כאן את המפתח שלך. הוא נשמר בדפדפן במכשיר הזה.</div>
-<div class="field"><label>Gemini API Key</label><input id="geminiKey" type="password" placeholder="AIza..."></div>
-<div class="actions"><button class="btn primary" onclick="saveGeminiKey()">שמור מפתח</button><button class="btn secondary" onclick="testGemini()">בדוק חיבור</button></div>
-<div id="aiStatus" class="muted" style="margin-top:8px"></div></div>
-<div class="card"><h2>היעדים שחושבו</h2><div id="calcBox" class="empty">מלא את הפרופיל</div><div class="notice">החישוב הוא הערכה כללית ולא תחליף לייעוץ רפואי או דיאטני. במצבים רפואיים, תרופות, היריון או הפרעות אכילה — התייעץ עם איש מקצוע.</div></div></div>
-</section>
+<div class="modal-overlay" id="imageViewerModal">
+    <div class="image-viewer-card">
+        <img id="fullSizeImage" class="full-size-img" src="" alt="תמונת מוצר מוגדלת">
+        <button class="btn-back-img" id="btnBackFromImage">↩️ חזור לרשימה</button>
+    </div>
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInAnonymously, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+    import { 
+        getFirestore, 
+        collection, 
+        addDoc, 
+        onSnapshot, 
+        doc, 
+        updateDoc, 
+        deleteDoc, 
+        query, 
+        orderBy,
+        getDocs,
+        writeBatch
+    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCEshB7ALH3-7DHG64YjUGMB5o3V1jfwiU",
-  authDomain: "siel-f080c.firebaseapp.com",
-  projectId: "siel-f080c",
-  storageBucket: "siel-f080c.firebasestorage.app",
-  messagingSenderId: "801630511187",
-  appId: "1:801630511187:web:573125bd0e7df870a726a6",
-  measurementId: "G-LR9T20ED3P"
-};
+    const firebaseConfig = {
+        apiKey: "AIzaSyA6OKhjI7x0KcTi9SwmQOrQHq4Gw4CGiCc",
+        authDomain: "kniot-db221.firebaseapp.com",
+        projectId: "kniot-db221",
+        storageBucket: "kniot-db221.firebasestorage.app",
+        messagingSenderId: "58557132378",
+        appId: "1:58557132378:web:bd0466a88cdfa8f1f33263",
+        measurementId: "G-TNY1W52ZDE"
+    };
 
-const fbApp = initializeApp(firebaseConfig);
-window.fbAuth = getAuth(fbApp);
-window.fbDb = getFirestore(fbApp);
-window.firebaseReady = true;
-window.firebaseFns = {doc,setDoc,getDoc,collection,onSnapshot,deleteDoc,signInAnonymously,signOut};
-window.firebaseUser = null;
-window.cloudProfilesUnsub = null;
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const itemsCollection = collection(db, "shopping_list");
+    const historyCollection = collection(db, "shopping_history");
 
-onAuthStateChanged(window.fbAuth, async (user) => {
-  window.firebaseUser = user;
-  if (user) {
-    try {
-      await loadCloudProfile();
-      subscribeCloudProfiles();
-      updateCloudStatus("☁️ מסונכרן עם Firebase — נתוני המשתמשים משותפים");
-    } catch(e) { updateCloudStatus("⚠️ Firebase מחובר, אך לא ניתן לקרוא את נתוני המשתמש."); }
-  } else {
-    updateCloudStatus("☁️ מתחבר לענן...");
-    try {
-      await signInAnonymously(window.fbAuth);
-    } catch(e) {
-      updateCloudStatus("⚠️ יש להפעיל Firebase Authentication → Anonymous");
+    const itemInput = document.getElementById('itemInput');
+    const imageInput = document.getElementById('imageInput');
+    const photoPreviewName = document.getElementById('photoPreviewName');
+    const addBtn = document.getElementById('addBtn');
+    const categoriesContainer = document.getElementById('categoriesContainer');
+    const suggestionsDropdown = document.getElementById('suggestionsDropdown');
+
+    const btnClearAll = document.getElementById('btnClearAll');
+    const btnOpenHistory = document.getElementById('btnOpenHistory');
+
+    const clearModal = document.getElementById('clearModal');
+    const historyModal = document.getElementById('historyModal');
+    const historyContent = document.getElementById('historyContent');
+    const imageViewerModal = document.getElementById('imageViewerModal');
+    const fullSizeImage = document.getElementById('fullSizeImage');
+    const btnBackFromImage = document.getElementById('btnBackFromImage');
+
+    const btnModalSaveAndClear = document.getElementById('btnModalSaveAndClear');
+    const btnModalClearOnly = document.getElementById('btnModalClearOnly');
+    const btnModalCancel = document.getElementById('btnModalCancel');
+    const btnCloseHistory = document.getElementById('btnCloseHistory');
+
+    let currentListSnapshot = [];
+
+    const EXTENDED_SUPERMARKET_DATABASE = [
+        "ריצפז", "ריצפז אופטימה", "ריצפז פרש", "סנו מקסימה", "סנו ז'בל", "סנו 999", "סנו קליר", "סנו שטיחים", "סנו תנורים",
+        "אקונומיקה", "אקונומיקה סנו", "פיירי נוזל כלים", "פיירי כפסולות למדיח", "פיירי פלטינום", "אבקת כביסה אריאל", "אבקת כביסה סנו",
+        "מרכך כביסה בדין", "מרכך כביסה סנו מקסימה", "סבון ידיים", "סבון גוף דאב", "סבון גוף פלמוליב", "שמפו פינוק", "שמפו הד אנד שולדרס",
+        "מרכך לשיער", "מרכך פינוק", "משחת שיניים קולגייט", "מברשת שיניים", "נייר טואלט לילי", "נייר טואלט שמורת טבע",
+        "מגבוני ניקוי סנו", "מגבונים לחים", "שקיות אשפה", "ספוג הפלא", "כרית ניקוי סקוטש", "נוזל חלונות", "מטהר אוויר סנו",
+        "חלב 3%", "חלב 1%", "חלב דל לקטוז", "חלב עיזים", "חלב שקדים", "חלב שיבולת שועל", "חלב סויה",
+        "גבינה לבנה 5%", "גבינה לבנה 9%", "גבינה ללא לקטוז", "גבינה צהובה עמק", "גבינה צהובה נעם", "גבינה כחולה", "גבינה בולגרית", "גבינה צפתית",
+        "גבינת קוטג' 5%", "גבינת קוטג' 9%", "גבינת שמנת", "גבינת נפוליאון", "גבינת גאודה", "גבינת מוצרלה", "גבינת פרמזן",
+        "שמנת חמוצה 15%", "שמנת מתוקה 38%", "חמאה תנובה", "יוגורט דנונה", "יוגורט יופלה", "יוגורט פרו", "מעדן מילקי", "מעדן דניאל", "שוקו יטבתה",
+        "עגבניות", "עגבניות שרי", "מלפפונים", "בצל צהוב", "בצל אדום", "בצל ירוק", "תפוחי אדמה", "תפוח אדמה אדום", "גזר", "פלפל אדום", "פלפל צהוב", "פלפל ירוק", "חסה ערבית", "חסה עגולה",
+        "לימונים", "תפוח עץ חרמון", "תפוח עץ גרני סמית", "בננות", "ענבים ירוקים", "ענבים שחורים", "אבוקדו", "אבטיח", "מלון", "תפוזים", "קלמנטינות", "פטריית שמפניון", "פטריות פורטובלו",
+        "קישואים", "חצילים", "שום ישראלי", "כרוב לבן", "כרוב אדום", "כרובית", "ברוקולי", "תירס טרי", "בטטה",
+        "לחם אחיד פרוס", "לחם מחמצת", "לחם דגנים", "לחם קל", "פיתות", "פיתות כוסמין", "חלה לשבת", "חלת כוסמין", "לחמניות המבורגר", "לחמניות שמינית",
+        "עוגת שוקולד", "עוגת הבית", "עוגיות שוקולד צ'יפס", "עוגיות מזרחיות", "בורקס גבינה", "בורקס תפוח אדמה", "רוגלך", "קרואסון חמאה", "בייגל ירושלמי",
+        "חזה עוף טרי", "פרגיות טריות", "בשר בקר טחון", "כרעי עוף", "שוקיים", "כנפיים", "בשר לצלי", "סטייק אנטריקוט", "צלעות כבש", "שניצל עוף", "נקניקיות יחיעם", "נקניקיות זוגלובק",
+        "פילה סלמון טרי", "פילה סלמון קפוא", "דג אמנון טרי", "דג נסיכת הנילוס", "קופסת טונה פרי הגליל", "קופסת טונה סטארקיסט",
+        "פיצה מעדנות", "פיצה אישית", "גלידה שטראוס", "גלידה בן אנד ג'ריס", "ארטיק קרח", "מלוואח מעדנות", "ג'חנון מעדנות", "בצק עלים", "בצק פילאס", "לקט ירקות סנפרוסט", "צ'יפס קפוא",
+        "רסק עגבניות יכין", "עגבניות מרוסקות", "זיתים ירוקים מבוקעים", "זיתים שחורים", "מלפפון חמוץ במלח", "מלפפון חמוץ בחומץ", "תירס שימורים", "חומוס גרגירים בקופסה", "פול ירוק בקופסה",
+        "אורז פרסי", "אורז בסמטי", "פסטה אסם", "פתיתים אפויים", "קוסקוס מהיר הכנה", "שקדי מרק", "קפה שחור עלית", "קפה נמס ג'ייקובס", "קפה טסטרס צ'ויס", "סוכר לבן", "מלח שולחן",
+        "שמן זית כתית מעולה", "שמן קנולה", "תבלין פפריקה מתוקה", "תבלין כמונן", "כריות תלמה", "קורנפלקס תלמה", "במבה אסם", "ביסלי בצל", "שוקולד פרה"
+    ];
+
+    function getStoredSuggestions() {
+        const custom = JSON.parse(localStorage.getItem('shopping_auto_complete')) || [];
+        return Array.from(new Set([...custom, ...EXTENDED_SUPERMARKET_DATABASE]));
     }
-  }
-});
-</script>
-<script>
-const LEGACY_KEY='cutcoach_v1';
-const ACCOUNTS_KEY='cutcoach_accounts_v1';
-const DEFAULT_STATE=()=>({profile:{},foods:[],menu:[],chat:[],savedMeals:[],weights:[]});
-let accounts=JSON.parse(localStorage.getItem(ACCOUNTS_KEY)||'null')||{};
-let activeUser=localStorage.getItem('cutcoach_active_user')||'';
-if(!Object.keys(accounts).length){
-  const legacy=JSON.parse(localStorage.getItem(LEGACY_KEY)||'null');
-  activeUser='המשתמש שלי'; accounts[activeUser]=legacy||DEFAULT_STATE();
-  localStorage.setItem(ACCOUNTS_KEY,JSON.stringify(accounts));
-  localStorage.setItem('cutcoach_active_user',activeUser);
-}
-if(!accounts[activeUser]) activeUser=Object.keys(accounts)[0];
-let state=accounts[activeUser]||DEFAULT_STATE();
-state.savedMeals=state.savedMeals||[]; state.weights=state.weights||[];
-const $=id=>document.getElementById(id);
-let cloudTimer;
-function normalizeState(){state=state||DEFAULT_STATE();state.profile=state.profile||{};state.foods=Array.isArray(state.foods)?state.foods:[];state.menu=Array.isArray(state.menu)?state.menu:[];state.chat=Array.isArray(state.chat)?state.chat:[];state.savedMeals=Array.isArray(state.savedMeals)?state.savedMeals:[];state.weights=Array.isArray(state.weights)?state.weights:[];}
-function save(){
-  normalizeState(); accounts[activeUser]=state; localStorage.setItem(ACCOUNTS_KEY,JSON.stringify(accounts)); localStorage.setItem('cutcoach_active_user',activeUser);
-  updateUserButton();
-  clearTimeout(cloudTimer); cloudTimer=setTimeout(syncCloud,700);
-}
-function profileDocId(name){return String(name||'user').trim().replace(/[\/]/g,'-').slice(0,120)||'user';}
-const CLOUD_COLLECTION='cutcoach_profiles';
-async function loadCloudProfile(){
-  if(!window.firebaseUser||!window.firebaseDb)return;
-  const {doc,getDoc}=window.firebaseFns;
-  const ref=doc(window.firebaseDb,CLOUD_COLLECTION,profileDocId(activeUser));
-  const snap=await getDoc(ref);
-  if(snap.exists()){
-    const cloud=snap.data();
-    state={...DEFAULT_STATE(),...cloud}; normalizeState(); accounts[activeUser]=state;
-    localStorage.setItem(ACCOUNTS_KEY,JSON.stringify(accounts));
-    renderAll();
-  } else {
-    // Create the shared named profile so it immediately appears on other devices.
-    await syncCloud();
-  }
-}
-async function subscribeCloudProfiles(){
-  if(!window.firebaseUser||!window.firebaseDb)return;
-  if(window.cloudProfilesUnsub) window.cloudProfilesUnsub();
-  const {collection,onSnapshot}=window.firebaseFns;
-  window.cloudProfilesUnsub=onSnapshot(collection(window.firebaseDb,CLOUD_COLLECTION),(snap)=>{
-    snap.docChanges().forEach(change=>{
-      const d=change.doc.data();
-      const name=d.userName || change.doc.id;
-      if(change.type==='removed'){
-        if(accounts[name]) delete accounts[name];
-        if(activeUser===name){
-          const next=Object.keys(accounts)[0];
-          if(next){ activeUser=next; state=accounts[next]; localStorage.setItem('cutcoach_active_user',activeUser); }
+
+    function addWordToSuggestions(word) {
+        if (!word) return;
+        const custom = JSON.parse(localStorage.getItem('shopping_auto_complete')) || [];
+        if (!custom.includes(word)) {
+            custom.unshift(word);
+            localStorage.setItem('shopping_auto_complete', JSON.stringify(custom));
         }
-      } else {
-        const cloud={...DEFAULT_STATE(),...d}; delete cloud.userName; delete cloud.updatedAt; normalizeObjectState(cloud);
-        accounts[name]=cloud;
-        if(name===activeUser){ state=cloud; normalizeState(); renderAll(); }
-      }
-    });
-    localStorage.setItem(ACCOUNTS_KEY,JSON.stringify(accounts));
-    updateUserButton(); renderUserList();
-  },()=>updateCloudStatus('⚠️ לא ניתן לעדכן נתונים משותפים מהענן'));
-}
-function normalizeObjectState(s){
-  s.profile=s.profile||{}; s.foods=Array.isArray(s.foods)?s.foods:[]; s.menu=Array.isArray(s.menu)?s.menu:[]; s.chat=Array.isArray(s.chat)?s.chat:[]; s.savedMeals=Array.isArray(s.savedMeals)?s.savedMeals:[]; s.weights=Array.isArray(s.weights)?s.weights:[];
-}
-async function updateApp(){
-  const b=$('updateBtn');
-  if(b){b.disabled=true;b.textContent='⏳ בודק עדכון...';}
-  try{
-    // Ask the server for a fresh copy, bypassing browser cache.
-    const url=new URL(window.location.href);
-    url.searchParams.set('_update',Date.now().toString());
-    const r=await fetch(url.toString(),{cache:'no-store',headers:{'Cache-Control':'no-cache'}});
-    if(!r.ok)throw new Error('update check failed');
-    // Keep local user data, but reload the HTML/JS from the newest server copy.
-    location.replace(url.toString());
-  }catch(e){
-    if(b){b.disabled=false;b.textContent='🔄 עדכון';}
-    alert('לא הצלחתי לבדוק עדכון כרגע. נסה שוב בעוד רגע.');
-  }
-}
-function renderAll(){renderHome();renderProfile();renderLog();if(state.menu.length)renderMenu();renderChat();renderWeekly();}
-function updateUserButton(){const b=$('currentUserBtn');if(b)b.textContent='👤 '+activeUser;}
-function openUserModal(){renderUserList();$('userModal').style.display='flex';$('newUserName').value='';}
-function closeUserModal(){$('userModal').style.display='none';}
-function renderUserList(){
-  const box=$('userList');if(!box)return;
-  box.innerHTML=Object.keys(accounts).map(n=>`
-    <div style="display:flex;gap:6px;align-items:center;margin:6px 0">
-      <button class="btn ${n===activeUser?'primary':'secondary'}" style="flex:1;text-align:right" onclick="switchUser(${JSON.stringify(n)})">
-        👤 ${n}${n===activeUser?' ✓':''}
-      </button>
-      <button class="btn dangerBtn" title="מחק משתמש" onclick="deleteUser(${JSON.stringify(n)})">🗑️</button>
-    </div>`).join('');
-  updateUserButton();
-}
-function createUser(){
-  const n=$('newUserName').value.trim();
-  if(!n){alert('הזן שם משתמש.');return;}
-  if(accounts[n]){alert('המשתמש הזה כבר קיים. בחר שם אחר או היכנס אליו.');return;}
-  accounts[n]=DEFAULT_STATE();
-  localStorage.setItem(ACCOUNTS_KEY,JSON.stringify(accounts));
-  switchUser(n);
-  setTimeout(()=>syncCloud(),300);
-}
-
-async function deleteUser(n){
-  if(!accounts[n]) return;
-  const names=Object.keys(accounts);
-  if(names.length<=1){
-    alert('אי אפשר למחוק את המשתמש האחרון. צור משתמש נוסף לפני המחיקה.');
-    return;
-  }
-  if(!confirm('למחוק את המשתמש "'+n+'" ואת כל הנתונים שלו?')) return;
-
-  // Delete from the local list immediately.
-  delete accounts[n];
-  localStorage.setItem(ACCOUNTS_KEY,JSON.stringify(accounts));
-
-  // Delete the shared cloud profile as well.
-  if(window.firebaseUser && window.firebaseDb){
-    try{
-      const {doc,deleteDoc}=window.firebaseFns;
-      await deleteDoc(doc(window.firebaseDb,CLOUD_COLLECTION,profileDocId(n)));
-    }catch(e){
-      // Keep the local deletion, but tell the user if cloud deletion failed.
-      updateCloudStatus('⚠️ המשתמש נמחק מהמכשיר, אך המחיקה בענן נכשלה.');
     }
-  }
 
-  // If the deleted user was active, move to another existing user.
-  if(activeUser===n){
-    const next=Object.keys(accounts)[0];
-    activeUser=next;
-    state=accounts[next];
-    normalizeState();
-    localStorage.setItem('cutcoach_active_user',activeUser);
-    renderAll();
-    updateUserButton();
-  }
+    itemInput.addEventListener('input', () => {
+        const value = itemInput.value.trim().toLowerCase();
+        
+        if (!value) {
+            suggestionsDropdown.classList.remove('active');
+            suggestionsDropdown.innerHTML = '';
+            return;
+        }
 
-  renderUserList();
-  save();
-  closeUserModal();
-}
+        const allSuggestions = getStoredSuggestions();
+        const filtered = allSuggestions.filter(item => item.toLowerCase().includes(value));
 
-function switchUser(n){
-  if(!accounts[n]) return;
+        if (filtered.length === 0) {
+            suggestionsDropdown.classList.remove('active');
+            suggestionsDropdown.innerHTML = '';
+            return;
+        }
 
-  // Switch immediately on this device. Firebase must not block the UI.
-  activeUser=n;
-  state=accounts[n];
-  normalizeState();
-  localStorage.setItem('cutcoach_active_user',activeUser);
+        suggestionsDropdown.innerHTML = '';
+        filtered.slice(0, 8).forEach(suggestedText => {
+            const div = document.createElement('div');
+            div.className = 'suggestion-item';
+            div.innerHTML = `<span>${suggestedText}</span> <span>🔍</span>`;
+            
+            div.addEventListener('click', () => {
+                itemInput.value = suggestedText;
+                suggestionsDropdown.classList.remove('active');
+            });
 
-  closeUserModal();
-  updateUserButton();
-  renderAll();
+            suggestionsDropdown.appendChild(div);
+        });
 
-  // Load the shared copy in the background.
-  if(window.firebaseUser && window.firebaseDb){
-    loadCloudProfile().then(()=>{
-      updateUserButton();
-      renderAll();
-      renderUserList();
-    }).catch(()=>{
-      updateCloudStatus('⚠️ לא ניתן לטעון כרגע את נתוני המשתמש מהענן');
+        suggestionsDropdown.classList.add('active');
     });
-  } else {
-    save();
-  }
-}
 
-async function syncCloud(){
-  if(!window.firebaseUser||!window.firebaseDb)return;
-  try{
-    const {doc,setDoc}=window.firebaseFns;
-    await setDoc(doc(window.firebaseDb,CLOUD_COLLECTION,profileDocId(activeUser)),{
-      profile:state.profile, foods:state.foods, menu:state.menu, chat:state.chat, savedMeals:state.savedMeals, weights:state.weights,
-      userName:activeUser, updatedAt:new Date().toISOString()
-    },{merge:true});
-    updateCloudStatus('☁️ נשמר בענן עבור '+activeUser);
-  }catch(e){updateCloudStatus('⚠️ לא ניתן לשמור כרגע בענן');}
-}
-function updateCloudStatus(t){const x=document.getElementById('cloudStatus');if(x)x.textContent=t;}
-async function cloudLogin(){
-  try{
-    if(window.firebaseUser){ updateCloudStatus("☁️ כבר מחובר — "+activeUser); return; }
-    await window.firebaseFns.signInAnonymously(window.fbAuth);
-  }catch(e){ updateCloudStatus("⚠️ ב-Firebase הפעל Authentication → Sign-in method → Anonymous"); }
-}
-async function cloudLogout(){try{await window.firebaseFns.signOut(window.fbAuth);location.reload();}catch(e){}}
+    document.addEventListener('click', (e) => {
+        if (!itemInput.contains(e.target) && !suggestionsDropdown.contains(e.target)) {
+            suggestionsDropdown.classList.remove('active');
+        }
+    });
 
-function showPage(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===id));if(id==='home')renderHome();if(id==='log')renderLog();if(id==='menu'){if(!state.menu.length)generateMenu();else renderMenu()}if(id==='coach')renderChat();if(id==='profile')renderProfile();if(id==='progress')renderWeekly();}
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>showPage(b.dataset.page));
-updateUserButton();
-function calcProfile(p){if(!p.age||!p.height||!p.weight)return null;let bmr=10*p.weight+6.25*p.height-5*p.age+(p.gender==='male'?5:-161);let tdee=bmr*(+p.activity||1.55);let deficit=7700*(+p.rate||.5)/7;let cal=Math.max(1200,Math.round(tdee-deficit));let protein=Math.round(p.weight*1.8);let fat=Math.round((cal*.25)/9);let carb=Math.max(0,Math.round((cal-protein*4-fat*9)/4));return {bmr:Math.round(bmr),tdee:Math.round(tdee),cal,protein,fat,carb};}
-function saveProfile(){state.profile={gender:$('gender').value,age:+$('age').value,height:+$('height').value,weight:+$('weight').value,target:+$('target').value,activity:$('activity').value,rate:$('rate').value};save();renderProfile();generateMenu();renderHome();alert('הפרופיל נשמר והיעדים חושבו.');}
-function addWeeklyWeight(){
- const w=+$('weeklyWeight').value, d=$('weeklyDate').value||new Date().toISOString().slice(0,10);
- if(!w){alert('הזן משקל.');return;}
- state.weights.push({date:d,weight:w});state.weights.sort((a,b)=>a.date.localeCompare(b.date));
- state.profile.weight=w;save();renderWeekly();renderHome();renderProfile();
- $('weeklyWeight').value='';
-}
-function renderWeekly(){
- const h=$('weightHistory'), s=$('weeklySummary'); if(!h||!s)return;
- if(!state.weights.length){h.innerHTML='<div class="empty">עדיין אין דיווחים שבועיים.</div>';s.innerHTML='';return;}
- h.innerHTML=state.weights.slice().reverse().map((x,i)=>`<div class="foodline"><span>${x.date}</span><b>${x.weight} kg</b></div>`).join('');
- const first=state.weights[0], last=state.weights[state.weights.length-1], diff=last.weight-first.weight;
- let target=state.profile.target?Math.max(0,last.weight-state.profile.target):null;
- s.innerHTML=`<div class="foodline"><span>שינוי מאז הדיווח הראשון</span><b>${diff>0?'+':''}${diff.toFixed(1)} kg</b></div>`+(target!==null?`<div class="foodline"><span>עד משקל היעד</span><b>${target.toFixed(1)} kg</b></div>`:'');
-}
-function renderProfile(){let p=state.profile;$('geminiKey').value=state.geminiKey||'';if($('weeklyDate'))$('weeklyDate').value=new Date().toISOString().slice(0,10);$('aiStatus').textContent=state.geminiKey?'מפתח שמור במכשיר.':'אין מפתח שמור.';$('gender').value=p.gender||'male';['age','height','weight','target'].forEach(k=>$(k).value=p[k]||'');$('activity').value=p.activity||'1.55';$('rate').value=p.rate||'.5';let c=calcProfile(p);$('calcBox').innerHTML=c?`<div class="foodline"><span>שריפת בסיס (BMR)</span><b>${c.bmr} kcal</b></div><div class="foodline"><span>תחזוקה משוערת (TDEE)</span><b>${c.tdee} kcal</b></div><div class="foodline"><span>🎯 יעד קלורי</span><b>${c.cal} kcal</b></div><div class="foodline"><span>🥩 חלבון</span><b>${c.protein}g</b></div><div class="foodline"><span>🍚 פחמימות</span><b>${c.carb}g</b></div><div class="foodline"><span>🥑 שומן</span><b>${c.fat}g</b></div>`:'מלא את הפרופיל';}
-function totals(){return state.foods.reduce((a,f)=>{a.cal+=f.cal;a.pro+=f.pro;a.carb+=f.carb||0;a.fat+=f.fat||0;return a},{cal:0,pro:0,carb:0,fat:0});}
-function renderHome(){let c=calcProfile(state.profile),t=totals();if(!c){$('heroCal').textContent='0 / 0 kcal';$('heroRemain').textContent='הגדר פרופיל כדי להתחיל';return}$('heroCal').textContent=`${t.cal} / ${c.cal} kcal`;$('heroRemain').textContent=t.cal<=c.cal?`נשארו לך ${c.cal-t.cal} קלוריות היום`:`חרגת בכ-${t.cal-c.cal} קלוריות`;[['sCal','pCal','cal',c.cal],['sPro','pPro','pro',c.protein],['sCarb','pCarb','carb',c.carb],['sFat','pFat','fat',c.fat]].forEach(x=>{$(x[0]).textContent=x[2]==='cal'?t[x[2]]:t[x[2]]+'g';$(x[1]).style.width=Math.min(100,t[x[2]]/x[3]*100)+'%'});$('todayMeals').innerHTML=state.foods.length?state.foods.map(f=>`<div class="foodline"><span>${f.name}<small class="muted"> · ${f.qty||1} ${f.unit||'מנה'} · ${f.meal}</small></span><b>${f.cal} kcal</b></div>`).join(''):'<div class="empty">עדיין לא הוספת אוכל היום.</div>';$('goalBox').innerHTML=`<div class="foodline"><span>משקל נוכחי</span><b>${state.profile.weight||'—'} kg</b></div><div class="foodline"><span>יעד</span><b>${state.profile.target||'—'} kg</b></div>`;}
-function renderLog(){$('logList').innerHTML=state.foods.length?state.foods.map((f,i)=>`<div class="foodline"><span><b>${f.name}</b><br><small class="muted">${f.qty||1} ${f.unit||'מנה'} · ${f.meal} · ${f.pro}g חלבון</small></span><span>${f.cal} kcal <button class="btn dangerBtn" onclick="delFood(${i})">×</button></span></div>`).join(''):'<div class="empty">אין מזונות ביומן.</div>';$('logList').insertAdjacentHTML('afterend','<div style="margin-top:10px"><button class="btn secondary" onclick="saveCurrentMeal()">⭐ שמור את הארוחות האחרונות</button></div>');renderSavedMeals();}
-function addFood(){
- let name=$('foodText').value.trim();if(!name)return;
- let qty=+$('foodQty').value||1, unit=$('foodUnit').value;
- let base=estimate(name);
- let baseCal=+$('foodCal').value||base.cal, basePro=+$('foodPro').value||base.pro;
- let baseCarb=+$('foodCarb').value||base.carb||0, baseFat=+$('foodFat').value||base.fat||0;
- let multiplier=(unit==='g'||unit==='ml')?qty/100:qty;
- state.foods.push({name,meal:$('mealType').value,qty,unit,cal:Math.round(baseCal*multiplier),pro:Math.round(basePro*multiplier),carb:Math.round(baseCarb*multiplier),fat:Math.round(baseFat*multiplier)});
- save();['foodText','foodCal','foodPro','foodCarb','foodFat'].forEach(id=>$(id).value='');$('foodQty').value=1;$('foodUnit').value='g';renderLog();renderHome();
-}
-function saveCurrentMeal(){
- if(!state.foods.length){alert('אין ארוחה לשמור.');return;}
- const title=prompt('איך לקרוא לארוחה?','הארוחה שלי'); if(!title)return;
- const items=state.foods.slice(-10).map(f=>({...f}));
- state.savedMeals.push({title,items,total:items.reduce((a,f)=>({cal:a.cal+f.cal,pro:a.pro+f.pro,carb:a.carb+f.carb,fat:a.fat+f.fat}),{cal:0,pro:0,carb:0,fat:0})});
- save();renderSavedMeals();
-}
-function addSavedMeal(i){
- const meal=state.savedMeals[i]; if(!meal)return;
- meal.items.forEach(f=>state.foods.push({...f,meal:'ארוחה שמורה'}));
- save();renderLog();renderHome();
-}
-function deleteSavedMeal(i){state.savedMeals.splice(i,1);save();renderSavedMeals();}
-function renderSavedMeals(){
- const box=$('savedMealsList'); if(!box)return;
- box.innerHTML=state.savedMeals.length?state.savedMeals.map((m,i)=>`<div class="foodline"><span><b>${m.title}</b><br><small class="muted">${m.items.length} פריטים · ${m.total.cal} kcal · ${m.total.pro}g חלבון</small></span><span><button class="btn secondary" onclick="addSavedMeal(${i})">＋ הוסף</button> <button class="btn dangerBtn" onclick="deleteSavedMeal(${i})">×</button></span></div>`).join(''):'<div class="empty">עדיין אין ארוחות שמורות.</div>';
-}
-function addProduct(p){
- const n=p.product_name||p.generic_name||'מוצר';
- const q=p.nutriments||{};
- const cal=Math.round(q['energy-kcal_100g']||((q['energy_100g']||0)/4.184)||0);
- const pro=Math.round(q['proteins_100g']||0);
- const carb=Math.round(q['carbohydrates_100g']||0);
- const fat=Math.round(q['fat_100g']||0);
- $('foodText').value=n;
- $('foodQty').value=100;
- $('foodUnit').value='g';
- $('foodCal').value=cal;
- $('foodPro').value=pro;
- $('foodCarb').value=Math.round(q['carbohydrates_100g']||0);
- $('foodFat').value=Math.round(q['fat_100g']||0);
- $('smartResult').innerHTML=`<div class="notice">נבחר: <b>${n}</b> · ${cal} kcal · ${pro}g חלבון ל-100g. הזן את הכמות שאכלת כדי לדייק.</div>`;
-}
-async function searchProducts(){
- const q=$('productSearch').value.trim(); if(!q)return;
- const box=$('productResults'); box.innerHTML='<div class="empty">מחפש במאגר הגדול...</div>';
- try{
-   const url='https://world.openfoodfacts.org/cgi/search.pl?search_terms='+encodeURIComponent(q)+'&search_simple=1&action=process&json=1&page_size=12&fields=code,product_name,generic_name,brands,nutriments,image_front_small_url';
-   const r=await fetch(url); const d=await r.json();
-   const products=(d.products||[]).filter(p=>p.product_name&&p.nutriments);
-   if(!products.length){box.innerHTML='<div class="empty">לא נמצאו מוצרים. נסה שם אחר או מותג.</div>';return;}
-   box.innerHTML=products.map((p,i)=>{
-     const n=p.product_name, brand=p.brands||'', q=p.nutriments||{};
-     const cal=Math.round(q['energy-kcal_100g']||((q['energy_100g']||0)/4.184)||0);
-     const pro=Math.round(q['proteins_100g']||0), carb=Math.round(q['carbohydrates_100g']||0), fat=Math.round(q['fat_100g']||0);
-     return `<div class="foodline" style="align-items:flex-start"><span><b>${n}</b>${brand?`<small class="muted"> · ${brand}</small>`:''}<br><small class="muted">${cal} kcal · ${pro}g חלבון · ${carb}g פחמימה · ${fat}g שומן / 100g</small></span><button class="btn secondary" onclick='addProduct(${JSON.stringify(p).replace(/'/g,"&#39;")})'>בחר</button></div>`;
-   }).join('');
- }catch(e){box.innerHTML='<div class="notice">לא הצלחתי להתחבר כרגע למאגר. אפשר לנסות שוב.</div>';}
-}
-async function barcodeLookup(code){
- if(!code)return;
- const box=$('productResults');box.innerHTML='<div class="empty">מחפש ברקוד...</div>';
- try{
-   const r=await fetch('https://world.openfoodfacts.org/api/v2/product/'+encodeURIComponent(code)+'.json?fields=code,product_name,generic_name,brands,nutriments');
-   const d=await r.json();
-   if(d.status!==1||!d.product){box.innerHTML='<div class="empty">הברקוד לא נמצא במאגר.</div>';return;}
-   box.innerHTML='<div class="foodline"><span><b>'+ (d.product.product_name||'מוצר') +'</b><br><small class="muted">נמצא לפי ברקוד</small></span><button class="btn primary" onclick="addProduct('+JSON.stringify(d.product).replace(/"/g,'&quot;')+')">בחר</button></div>';
- }catch(e){box.innerHTML='<div class="notice">שגיאה בחיפוש הברקוד.</div>';}
-}
-function scanBarcode(){
- const code=prompt('הזן את מספר הברקוד (EAN/UPC):');
- if(code)barcodeLookup(code.replace(/\D/g,''));
-}
-function delFood(i){state.foods.splice(i,1);save();renderLog();renderHome();}
-function estimate(s){s=s.toLowerCase();if(/עוף|חזה/.test(s))return{cal:330,pro:62,carb:0,fat:7};if(/אורז/.test(s))return{cal:195,pro:4,carb:42,fat:1};if(/ביצ/.test(s))return{cal:144,pro:13,carb:1,fat:10};if(/טונה/.test(s))return{cal:130,pro:29,carb:0,fat:1};if(/קוטג/.test(s))return{cal:200,pro:22,carb:6,fat:9};if(/לחם/.test(s))return{cal:250,pro:9,carb:45,fat:3};if(/פסטה/.test(s))return{cal:250,pro:9,carb:50,fat:2};return{cal:300,pro:15,carb:30,fat:12};}
-async function smartFood(){
- let s=$('foodText').value.trim();if(!s)return;
- if(state.geminiKey){
-   $('smartResult').innerHTML='<div class="empty">🤖 מנתח עם Gemini...</div>';
-   const ans=await callGemini(`נתח את המזון הבא: "${s}". אם הכמות חסרה, ציין שחסרה כמות. תן הערכה בלבד ולא ערך מדויק, ובקש תווית/מותג אם צריך.`);
-   $('smartResult').innerHTML='<div class="notice">'+ans.replace(/\n/g,'<br>')+'</div>';
- }else{
-   const e=estimate(s);$('smartResult').innerHTML=`<div class="notice">הערכה ראשונית: ${e.cal} kcal ו-${e.pro}g חלבון. כדי להשתמש ב-Gemini שמור מפתח ב"הפרופיל שלי".</div>`;
- }
-}
-function generateMenu(){let c=calcProfile(state.profile);if(!c)return;let remain=c.cal;let meals=[['בוקר','3 ביצים + 2 פרוסות לחם + ירקות',430,25],['צהריים','200g חזה עוף + 180g אורז + סלט',650,68],['נשנוש','קוטג׳ + פרי',260,23],['ערב','טונה + 2 פרוסות לחם + ירקות',430,40]];let scale=Math.min(1, c.cal/1770);state.menu=meals.map(x=>({meal:x[0],name:x[1],cal:Math.round(x[2]*scale),pro:Math.round(x[3]*scale)}));save();renderMenu();}
-function renderMenu(){$('menuList').innerHTML=state.menu.map(m=>`<div class="meal"><div class="row"><strong>${m.meal}</strong><span class="pill">${m.cal} kcal · ${m.pro}g חלבון</span></div><div style="margin-top:7px">${m.name}</div></div>`).join('');}
-function portionAdvice(){
- let food=$('wantFood').value||'ארוחה', rem=+$('remainingInput').value||calcProfile(state.profile)?.cal||0;
- $('portionResult').innerHTML=`<div class="notice"><b>${food}</b>: נשארו לך כ-${Math.round(rem)} קלוריות. כדי לתת כמויות מדויקות, חפש את המוצרים במאגר דרך "יומן אוכל", ואז אפשר לחשב את הכמות לפי הקלוריות והחלבון שלהם.</div>`;
-}
-async function callGemini(userText, imageData=null, mimeType='image/jpeg'){
- const key=state.geminiKey;
- if(!key) return 'אין עדיין מפתח Gemini. היכנס ל"הפרופיל שלי" והדבק את המפתח שלך.';
- const c=calcProfile(state.profile),t=totals();
- const context=c?`פרופיל: ${state.profile.gender==='male'?'גבר':'אישה'}, גיל ${state.profile.age}, גובה ${state.profile.height} ס"מ, משקל ${state.profile.weight} ק"ג, יעד ${state.profile.target} ק"ג. יעד יומי: ${c.cal} kcal, חלבון ${c.protein}g, פחמימות ${c.carb}g, שומן ${c.fat}g. נצרך היום: ${t.cal} kcal, חלבון ${t.pro}g, פחמימות ${t.carb}g, שומן ${t.fat}g.`:'אין פרופיל עדיין.';
- const prompt=`אתה מאמן תזונה אישי בתוך אפליקציית CutCoach. ענה בעברית, בצורה קצרה, פרקטית ולא שיפוטית. כשמנתחים תמונת אוכל, זהה את המזונות הנראים בתמונה והערך כמויות/משקל ומאקרו. חשוב: זיהוי מתמונה הוא הערכה בלבד; אל תציג מספרים כאמת ודאית. אם אי אפשר לדעת כמות או מרכיבים, ציין זאת ובקש אישור. ${context}
-בקשת המשתמש: ${userText}`;
- const parts=[{text:prompt}];
- if(imageData) parts.push({inlineData:{mimeType,data:imageData}});
- try{
-   const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key='+encodeURIComponent(key),{
-     method:'POST',headers:{'Content-Type':'application/json'},
-     body:JSON.stringify({contents:[{parts}],generationConfig:{maxOutputTokens:900}})
-   });
-   const d=await r.json();
-   if(!r.ok) return 'Gemini החזיר שגיאה: '+(d.error?.message||r.status);
-   return d.candidates?.[0]?.content?.parts?.map(x=>x.text||'').join('')||'לא התקבלה תשובה.';
- }catch(e){return 'לא הצלחתי להתחבר ל-Gemini. בדוק חיבור לאינטרנט והמפתח.';}
-}
-async function analyzeFoodImage(file){
- if(!file)return;
- if(!state.geminiKey){
-   $('photoPreview').innerHTML='<div class="notice">כדי לנתח תמונה צריך קודם לשמור Gemini API Key תחת "הפרופיל שלי".</div>';
-   return;
- }
- const reader=new FileReader();
- reader.onload=async ()=>{
-   const dataUrl=reader.result;
-   const base64=dataUrl.split(',')[1];
-   $('photoPreview').innerHTML=`<div class="card" style="margin-top:10px;padding:10px"><img src="${dataUrl}" style="max-width:100%;max-height:220px;border-radius:10px"><div class="empty">🤖 מנתח את התמונה...</div></div>`;
-   const ans=await callGemini('זה צילום של האוכל שאני עומד/ת לאכול. זהה מה יש בצלחת והערך כמות, קלוריות, חלבון, פחמימות ושומן. בסוף תן לי סיכום ברור והדגש מה כדאי לי לשקול/למדוד כדי לשפר את הדיוק.',base64,file.type||'image/jpeg');
-   $('photoPreview').innerHTML=`<div class="card" style="margin-top:10px;padding:10px"><img src="${dataUrl}" style="max-width:100%;max-height:220px;border-radius:10px"><div class="notice">${ans.replace(/\n/g,'<br>')}</div><div class="actions"><button class="btn primary" onclick="document.getElementById('foodText').value='הארוחה שבתמונה'; document.getElementById('smartResult').innerHTML='הניתוח הושלם. מומלץ לאשר את הכמויות לפני הוספה ליומן.'">המשך להוספה</button></div></div>`;
- };
- reader.readAsDataURL(file);
-}
-function saveGeminiKey(){
- const k=$('geminiKey').value.trim();
- state.geminiKey=k;save();
- $('aiStatus').textContent=k?'מפתח נשמר במכשיר.':'המפתח נמחק.';
-}
-async function testGemini(){
- saveGeminiKey();$('aiStatus').textContent='בודק חיבור...';
- const ans=await callGemini('ענה רק: "החיבור ל-Gemini עובד בהצלחה ✅"');
- $('aiStatus').textContent=ans;
-}
-function renderChat(){$('chat').innerHTML=state.chat.map(m=>`<div class="msg ${m.who}">${m.text}</div>`).join('');$('chat').scrollTop=99999;}
-async function sendChat(){
- let q=$('chatInput').value.trim();if(!q)return;
- state.chat.push({who:'user',text:q});save();renderChat();$('chatInput').value='';
- const loading={who:'ai',text:'חושב...'};state.chat.push(loading);renderChat();
- const ans=await callGemini(q);state.chat[state.chat.length-1].text=ans;save();renderChat();
-}
-renderHome();renderProfile();renderLog();renderSavedMeals();renderWeekly();if(state.menu.length)renderMenu();
+    const CATEGORIES = [
+        { id: 'produce', name: 'פירות וירקות', icon: '🥗' },
+        { id: 'dairy', name: 'מוצרי חלב', icon: '🧀' },
+        { id: 'bakery', name: 'לחמים ומאפים', icon: '🍞' },
+        { id: 'meat', name: 'בשר', icon: '🥩' },
+        { id: 'canned', name: 'שימורים', icon: '🥫' },
+        { id: 'dry', name: 'יבשים', icon: '🌾' },
+        { id: 'frozen', name: 'קפואים', icon: '🧊' },
+        { id: 'cleaning', name: 'נקיון', icon: '🧼' }
+    ];
+
+    function categorizeItem(name) {
+        const lower = name.toLowerCase();
+
+        if (lower.match(/(ריצפז|סנו|סבון|שמפו|כביסה|מרכך|אבקת כביסה|חומר|ניקיון|ספוג|אקונומיקה|נייר|טואלט|מגבונים|פיירי|ג'ל|שקיות זבל|סקוטש|משחת שיניים|מברשת שיניים|קליר|ז'בל)/)) {
+            return { categoryId: 'cleaning', icon: '🧼' };
+        }
+        if (lower.match(/(עגבני|מלפפון|בצל|תפוח|בננה|גזר|פלפל|חסה|תפוז|ענבים|אבטיח|לימון|תפוח אדמה|פטריות|פטרית|קישוא|חציל|שום|ירק|פרי|תות|אגס|אבוקדו|תירס|כרוב|כרובית|ברוקולי|בטטה|מלון|קלמנטינ)/)) {
+            return { categoryId: 'produce', icon: '🥗' };
+        }
+        if (lower.match(/(חלב|גבינה|חמאה|מעדן|יוגורט|קוטג|שמנת|צהובה|לבנה|מילקי|שוקו|פרוסה|בולגרית|צפתית|חלומי|מוצרלה|קשקבל|דנונה|יופלה)/)) {
+            return { categoryId: 'dairy', icon: '🥛' };
+        }
+        if (lower.match(/(לחם|פיתה|חלה|לחמני|פיתות|חלות|פוקאצ|בייגל|עוגה|עוגיו|בורקס|רוגלך|קרואסון|מאפה|פירורי לחם)/)) {
+            return { categoryId: 'bakery', icon: '🍞' };
+        }
+        if (lower.match(/(בשר|עוף|סטייק|פרגית|בקר|כבד|טחון|נקניק|נקניקיה|המבורגר|שניצל|דג|סלמון|טונה|אמנון|דגים|כרעיים|שוקיים|כנפיים)/)) {
+            return { categoryId: 'meat', icon: '🥩' };
+        }
+        if (lower.match(/(קפוא|גלידה|ארטיק|פיצה|מלוואח|ג'חנון|לקט|צ'יפס|בצק עלים|פילאס|ארטיקים|סנפרוסט)/)) {
+            return { categoryId: 'frozen', icon: '🧊' };
+        }
+        if (lower.match(/(שימורים|קופסת|רסק|זיתים|מלפפון חמוץ|טונה בקופסה|תירס שימורים|חומוס קופסה|פול)/)) {
+            return { categoryId: 'canned', icon: '🥫' };
+        }
+        return { categoryId: 'dry', icon: '🌾' };
+    }
+
+    imageInput.addEventListener('change', () => {
+        if (imageInput.files.length > 0) {
+            photoPreviewName.textContent = "📷 נבחרה תמונה: " + imageInput.files[0].name;
+        } else {
+            photoPreviewName.textContent = "";
+        }
+    });
+
+    const q = query(itemsCollection, orderBy("createdAt", "desc"));
+    onSnapshot(q, (snapshot) => {
+        categoriesContainer.innerHTML = '';
+        currentListSnapshot = [];
+
+        if (snapshot.empty) {
+            categoriesContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">🛒</div>
+                    <div class="empty-state-text">הרשימה ריקה כרגע</div>
+                </div>`;
+            return;
+        }
+
+        const itemsByCategory = {};
+        CATEGORIES.forEach(cat => itemsByCategory[cat.id] = []);
+
+        snapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            const id = docSnap.id;
+            const categoryInfo = categorizeItem(data.name);
+
+            const itemObj = {
+                id: id,
+                ...data,
+                icon: categoryInfo.icon
+            };
+
+            currentListSnapshot.push(itemObj);
+
+            if (!itemsByCategory[categoryInfo.categoryId]) {
+                itemsByCategory[categoryInfo.categoryId] = [];
+            }
+            itemsByCategory[categoryInfo.categoryId].push(itemObj);
+        });
+
+        let hasItems = false;
+        CATEGORIES.forEach(cat => {
+            const catItems = itemsByCategory[cat.id];
+            if (catItems && catItems.length > 0) {
+                hasItems = true;
+                const catSection = renderCategorySection(cat, catItems);
+                categoriesContainer.appendChild(catSection);
+            }
+        });
+
+        if (!hasItems) {
+            categoriesContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">🛒</div>
+                    <div class="empty-state-text">הרשימה ריקה כרגע</div>
+                </div>`;
+        }
+    }, (error) => {
+        console.error("שגיאה בחיבור:", error);
+
+        if (error?.code === "permission-denied") {
+            categoriesContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">🔒</div>
+                    <div class="empty-state-text">
+                        אין הרשאה לקרוא את רשימת הקניות.<br>
+                        צריך לעדכן את Firestore Rules.
+                    </div>
+                </div>`;
+        } else {
+            categoriesContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <div class="empty-state-text">
+                        שגיאה בחיבור לרשימת הקניות.<br>
+                        ${error?.message || ""}
+                    </div>
+                </div>`;
+        }
+    });
+
+    function resizeImage(file, maxWidth = 600) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > maxWidth) {
+                        height = Math.round((height * maxWidth) / width);
+                        width = maxWidth;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    resolve(canvas.toDataURL('image/jpeg', 0.75));
+                };
+            };
+        });
+    }
+
+
+
+    addBtn.addEventListener('click', async () => {
+        const name = itemInput.value.trim();
+        if (!name) {
+            alert('אנא רשום מה לקנות');
+            return;
+        }
+
+        addBtn.disabled = true;
+        addBtn.innerText = 'מוסיף לרשימה...';
+
+        try {
+            let imageData = null;
+            if (imageInput.files.length > 0) {
+                imageData = await resizeImage(imageInput.files[0]);
+            }
+
+            await addDoc(itemsCollection, {
+                name: name,
+                image: imageData,
+                bought: false,
+                createdAt: Date.now()
+            });
+
+            addWordToSuggestions(name);
+
+            itemInput.value = '';
+            imageInput.value = '';
+            photoPreviewName.textContent = '';
+            suggestionsDropdown.classList.remove('active');
+        } catch (err) {
+            console.error("שגיאה בהוספה:", err);
+
+            let message = "לא ניתן להוסיף כרגע.";
+
+            if (err?.code === "permission-denied") {
+                message = "אין הרשאה להוסיף מוצרים ל-Firestore. צריך לעדכן את Firestore Rules.";
+            } else if (err?.code === "failed-precondition") {
+                message = "Firestore עדיין לא מוגדר/זמין בפרויקט.";
+            } else if (err?.code === "unavailable") {
+                message = "אין כרגע חיבור ל-Firebase. בדוק את החיבור לאינטרנט.";
+            } else if (err?.message) {
+                message = "שגיאת Firebase: " + err.message;
+            }
+
+            alert(message);
+        } finally {
+            addBtn.disabled = false;
+            addBtn.innerHTML = '<span>➕</span><span>הוסף לרשימה</span>';
+        }
+    });
+
+    btnClearAll.addEventListener('click', () => {
+        if (currentListSnapshot.length === 0) {
+            alert("הרשימה כבר ריקה!");
+            return;
+        }
+        clearModal.classList.add('active');
+    });
+
+    btnModalCancel.addEventListener('click', () => {
+        clearModal.classList.remove('active');
+    });
+
+    btnModalSaveAndClear.addEventListener('click', async () => {
+        clearModal.classList.remove('active');
+        await clearCurrentList(true);
+    });
+
+    btnModalClearOnly.addEventListener('click', async () => {
+        clearModal.classList.remove('active');
+        await clearCurrentList(false);
+    });
+
+    async function clearCurrentList(saveToHistory) {
+        try {
+            if (saveToHistory && currentListSnapshot.length > 0) {
+                const now = new Date();
+                const dateStr = now.toLocaleDateString('he-IL', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                
+                const itemsToSave = currentListSnapshot.map(item => ({
+                    name: item.name,
+                    image: item.image || null
+                }));
+
+                itemsToSave.forEach(i => addWordToSuggestions(i.name));
+
+                await addDoc(historyCollection, {
+                    date: dateStr,
+                    createdAt: Date.now(),
+                    items: itemsToSave
+                });
+            }
+
+            const batch = writeBatch(db);
+            currentListSnapshot.forEach(item => {
+                const itemRef = doc(db, "shopping_list", item.id);
+                batch.delete(itemRef);
+            });
+            await batch.commit();
+
+        } catch (err) {
+            console.error("שגיאה בניקוי הרשימה:", err);
+            alert("אירעה שגיאה בעת ניקוי הרשימה.");
+        }
+    }
+
+    btnOpenHistory.addEventListener('click', async () => {
+        loadHistoryModal();
+    });
+
+    async function loadHistoryModal() {
+        historyModal.classList.add('active');
+        historyContent.innerHTML = '<div class="modal-text">טוען רשימות קודמות...</div>';
+
+        try {
+            const hQuery = query(historyCollection, orderBy("createdAt", "desc"));
+            const hSnap = await getDocs(hQuery);
+
+            if (hSnap.empty) {
+                historyContent.innerHTML = '<div class="modal-text">אין כרגע רשימות שמורות בהיסטוריה.</div>';
+                return;
+            }
+
+            historyContent.innerHTML = '';
+            hSnap.forEach(docSnap => {
+                const histData = docSnap.data();
+                const histId = docSnap.id;
+                const card = renderHistoryCard(histId, histData);
+                historyContent.appendChild(card);
+            });
+
+        } catch (err) {
+            console.error("שגיאה בטעינת היסטוריה:", err);
+            historyContent.innerHTML = '<div class="modal-text" style="color:red;">שגיאה בטעינת הרשימות הקודמות.</div>';
+        }
+    }
+
+    btnCloseHistory.addEventListener('click', () => {
+        historyModal.classList.remove('active');
+    });
+
+    btnBackFromImage.addEventListener('click', () => {
+        imageViewerModal.classList.remove('active');
+    });
+
+    function renderHistoryCard(histId, histData) {
+        const card = document.createElement('div');
+        card.className = 'saved-list-card';
+
+        const itemNames = histData.items.map(i => i.name).join(', ');
+
+        card.innerHTML = `
+            <div class="saved-list-header">
+                <span>📅 ${histData.date}</span>
+                <span>(${histData.items.length} מוצרים)</span>
+            </div>
+            <div class="saved-list-items">
+                <strong>מוצרים:</strong> ${itemNames}
+            </div>
+            <div class="saved-list-actions">
+                <button class="btn-copy-list" id="copy-hist-${histId}">
+                    <span>📋</span>
+                    <span>העתק לרשימה</span>
+                </button>
+                <button class="btn-delete-history" id="del-hist-${histId}">
+                    <span>🗑️</span>
+                    <span>הסר</span>
+                </button>
+            </div>
+        `;
+
+        card.querySelector(`#copy-hist-${histId}`).addEventListener('click', async () => {
+            if (confirm(`להעתיק ${histData.items.length} מוצרים לרשימה הנוכחית שלך?`)) {
+                try {
+                    const batch = writeBatch(db);
+                    histData.items.forEach(item => {
+                        const newDocRef = doc(itemsCollection);
+                        batch.set(newDocRef, {
+                            name: item.name,
+                            image: item.image || null,
+                            bought: false,
+                            createdAt: Date.now()
+                        });
+                        addWordToSuggestions(item.name);
+                    });
+                    await batch.commit();
+                    historyModal.classList.remove('active');
+                    alert('המוצרים הועתקו בהצלחה לרשימה הנוכחית!');
+                } catch (e) {
+                    console.error("שגיאה בהעתקה:", e);
+                    alert("אירעה שגיאה בעת העתקת המוצרים.");
+                }
+            }
+        });
+
+        card.querySelector(`#del-hist-${histId}`).addEventListener('click', async () => {
+            if (confirm(`להסיר את הרשימה מ-${histData.date} מההיסטוריה?`)) {
+                try {
+                    const histRef = doc(db, "shopping_history", histId);
+                    await deleteDoc(histRef);
+                    loadHistoryModal();
+                } catch (e) {
+                    console.error("שגיאה במחיקת היסטוריה:", e);
+                    alert("אירעה שגיאה בעת מחיקת הרשימה.");
+                }
+            }
+        });
+
+        return card;
+    }
+
+    function renderCategorySection(category, items) {
+        const section = document.createElement('div');
+        section.className = 'category-section';
+
+        const catHeader = document.createElement('div');
+        catHeader.className = 'category-header';
+        catHeader.innerHTML = `
+            <span class="category-icon">${category.icon}</span>
+            <span>${category.name} (${items.length})</span>
+        `;
+        section.appendChild(catHeader);
+
+        const ul = document.createElement('ul');
+        ul.className = 'shopping-list';
+
+        items.forEach(item => {
+            const li = document.createElement('li');
+            li.className = `item-row ${item.bought ? 'bought' : ''}`;
+
+            let iconOrImageHtml = '';
+            let specificTagHtml = '';
+
+            if (item.image) {
+                iconOrImageHtml = `<img src="${item.image}" alt="${item.name}" class="item-thumb" id="thumb-${item.id}">`;
+                specificTagHtml = `<span class="specific-tag">📷 מוצר ספציפי בתמונה</span>`;
+            } else {
+                iconOrImageHtml = `<div class="item-generic-icon">${item.icon}</div>`;
+            }
+
+            li.innerHTML = `
+                <div class="item-main">
+                    ${iconOrImageHtml}
+                    <div class="item-text-wrapper">
+                        <span class="item-text">${item.name}</span>
+                        ${specificTagHtml}
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <input type="checkbox" class="checkbox-custom" ${item.bought ? 'checked' : ''} id="check-${item.id}">
+                    <button class="btn-delete" id="del-${item.id}">
+                        <span>🗑️</span>
+                        <span>מחק</span>
+                    </button>
+                </div>
+            `;
+
+            ul.appendChild(li);
+        });
+
+        section.appendChild(ul);
+
+        setTimeout(() => {
+            items.forEach(item => {
+                const checkEl = document.getElementById(`check-${item.id}`);
+                const delEl = document.getElementById(`del-${item.id}`);
+                const thumbEl = document.getElementById(`thumb-${item.id}`);
+
+                if (checkEl) {
+                    checkEl.addEventListener('change', async (e) => {
+                        const itemRef = doc(db, "shopping_list", item.id);
+                        await updateDoc(itemRef, { bought: e.target.checked });
+                    });
+                }
+
+                if (delEl) {
+                    delEl.addEventListener('click', async () => {
+                        if (confirm(`להסיר את "${item.name}" מהרשימה?`)) {
+                            const itemRef = doc(db, "shopping_list", item.id);
+                            await deleteDoc(itemRef);
+                        }
+                    });
+                }
+
+                if (thumbEl) {
+                    thumbEl.addEventListener('click', () => {
+                        fullSizeImage.src = item.image;
+                        imageViewerModal.classList.add('active');
+                    });
+                }
+            });
+        }, 0);
+
+        return section;
+    }
 </script>
-<div style="max-width:1180px;margin:0 auto;padding:0 18px 22px;color:#7b8491;font-size:12px">מאגר מוצרים: Open Food Facts. הנתונים מוזנים על ידי הקהילה, ולכן יש לבדוק תווית מוצר כשדיוק חשוב.</div>
-
 
 </body>
 </html>
